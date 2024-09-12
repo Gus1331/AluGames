@@ -1,8 +1,10 @@
 package com.gus1331.services
 
 import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
 import com.gus1331.models.Jogo
 import com.gus1331.models.cheapsharkapi.ApiData
+import com.gus1331.models.cheapsharkapi.JogoPesquisa
 import java.net.URI
 import java.net.http.HttpClient
 import java.net.http.HttpRequest
@@ -72,6 +74,33 @@ class SharkApiService {
                 jogo?.descricao = "Jogo ${jogo?.titulo}"
             }
             return jogo
+        }
+
+        fun pesquisarPorTitulo(pesquisa:String):List<Jogo>{
+            val pesquisaFormatada = pesquisa.replace(" ", "%20")
+            val jogosBuscados = mutableListOf<Jogo>()
+
+            val client: HttpClient = HttpClient.newHttpClient()
+            val request = HttpRequest.newBuilder()
+                .uri(URI.create("https://www.cheapshark.com/api/1.0/games?title=$pesquisaFormatada&limit=3"))
+                .build()
+            val response = client
+                .send(request, HttpResponse.BodyHandlers.ofString())
+            val json = response.body()
+            val gson = Gson()
+
+            var res = mutableListOf<JogoPesquisa>()
+            val tipoLista = object : TypeToken<MutableList<JogoPesquisa>>() {}.type // Adapta a resposta da API para JogoPesquisa
+
+            runCatching {
+                res = gson.fromJson(json, tipoLista)
+            }.onSuccess {
+                res.forEach {
+                    jogosBuscados.add(Jogo(it.external, it.thumb))
+                }
+            }
+
+            return jogosBuscados
         }
     }
 }

@@ -1,5 +1,6 @@
 package com.gus1331.models
 
+import com.gus1331.controllers.SharkApiController
 import java.time.LocalDate
 import java.util.*
 import kotlin.random.Random
@@ -43,8 +44,27 @@ data class Jogador (var nome:String, var email:String){
     }
 
 
+    fun pesquisarJogo(){
+        if(usuario == null){
+            println("O jogador $nome precisa terminar o seu cadastro antes de pesquisar")
+            return
+        }
+        val sc = Scanner(System.`in`)
+        println("Pesquise por um jogo: \n")
+
+        val resultadoPesquisa = SharkApiController.pesquisarPorTitulo(sc.nextLine())
+
+        println("\nJogos encontrados:\n")
+        var i = 1
+        resultadoPesquisa.forEach{
+            println("$i - ${it.titulo}")
+            jogosBuscados.add(it)
+            i++
+        }
+    }
+
     private fun validarEmail(email:String):Boolean{
-        val emailRegex = Regex("^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\\\.[A-Za-z]{2,6}\$")
+        val emailRegex = Regex("^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,6}\$")
         return emailRegex.matches(email)
     }
 

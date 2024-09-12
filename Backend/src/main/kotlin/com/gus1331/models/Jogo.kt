@@ -4,7 +4,7 @@ class Jogo (
     val titulo:String,
     val capa:String){
 
-    var descricao:String? = null
+    var descricao:String? = "$titulo, O jogo."
     override fun toString(): String {
         return "Jogo{\n    titulo='$titulo',\n    capa='$capa',\n    descricao=$descricao\n}"
     }

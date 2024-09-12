@@ -12,5 +12,9 @@ class SharkApiController {
         fun buscarPorIdSemDescricao(id:String):Jogo?{
             return SharkApiService.buscarPorIdSemDescricao(id)
         }
+
+        fun pesquisarPorTitulo(pesquisa:String):List<Jogo>{
+            return SharkApiService.pesquisarPorTitulo(pesquisa)
+        }
     }
 }

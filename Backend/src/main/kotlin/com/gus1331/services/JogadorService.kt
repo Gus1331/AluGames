@@ -20,49 +20,54 @@ class JogadorService {
 
             var jogador:Jogador = Jogador(nome, email)
 
-            println("\nDigite a sua data de nascimento: (dd-mm-yyyy)")
-            var dataNascimentoString = sc.nextLine()
-            var dataNascimento:LocalDate? = null
+            println("Deseja realizar o cadastro completo? s/n")
 
-            val conversaoData = runCatching {
-                dataNascimento = LocalDate.parse(dataNascimentoString, DateTimeFormatter.ofPattern("dd-MM-yyyy"))
-            }
+            if(sc.nextLine().equals("s", true)){
+                println("\nDigite a sua data de nascimento: (dd-mm-yyyy)")
+                var dataNascimentoString = sc.nextLine()
+                var dataNascimento:LocalDate? = null
 
-            var novaTentativaIsSuccess = false
+                // apartir daqui, o objetivo era treinar runCatching
+                val conversaoData = runCatching {
+                    dataNascimento = LocalDate.parse(dataNascimentoString, DateTimeFormatter.ofPattern("dd-MM-yyyy"))
+                }
 
-            conversaoData.onFailure {
-                println("Formato de data inválido, deseja tentar novamente? s/n")
-                if(sc.nextLine().equals("s", true)){
+                var novaTentativaIsSuccess = false
 
-                    println("Digite novamente a sua data de nascimento: (dd-mm-yyy, Exemplo: 01/01/2000)")
-                    dataNascimentoString = sc.nextLine()
+                conversaoData.onFailure {
+                    println("Formato de data inválido, deseja tentar novamente? s/n")
+                    if(sc.nextLine().equals("s", true)){
+
+                        println("Digite novamente a sua data de nascimento: (dd-mm-yyy, Exemplo: 01/01/2000)")
+                        dataNascimentoString = sc.nextLine()
 
 
-                     val novaTentativa = runCatching {
-                         dataNascimento = LocalDate.parse(dataNascimentoString, DateTimeFormatter.ofPattern("dd-MM-yyyy"))
-                     }
+                        val novaTentativa = runCatching {
+                            dataNascimento = LocalDate.parse(dataNascimentoString, DateTimeFormatter.ofPattern("dd-MM-yyyy"))
+                        }
 
-                     novaTentativa.onFailure {
-                         println("Formato de data inválido")
-                         return jogador
-                     }
+                        novaTentativa.onFailure {
+                            println("Formato de data inválido")
+                            println("Interrompendo cadastro por excesso de tentativas")
+                            return jogador
+                        }
 
-                    novaTentativa.onSuccess {
-                        novaTentativaIsSuccess = true
+                        novaTentativa.onSuccess {
+                            novaTentativaIsSuccess = true
+                        }
                     }
                 }
-            }
 
-            var usuario:String? = null
+                var usuario:String? = null
 
+                if(conversaoData.isSuccess || novaTentativaIsSuccess) {
+                    if(dataNascimento != null){
+                        println("\nDigite seu nome de usuário: ")
 
-            if(conversaoData.isSuccess || novaTentativaIsSuccess) {
-                if(dataNascimento != null){
-                    println("\nDigite seu nome de usuário: ")
-
-                    jogador.let{
-                        it.dataNascimento = dataNascimento
-                        it.usuario = sc.nextLine()
+                        jogador.let{
+                            it.dataNascimento = dataNascimento
+                            it.usuario = sc.nextLine()
+                        }
                     }
                 }
             }

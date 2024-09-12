@@ -9,7 +9,47 @@ fun main() {
     val sc = Scanner(System.`in`)
     println("Hello World!!!\n\n")
 
+    val jogador = JogadorController.novoJogador()
+
+    do{
+        jogador.pesquisarJogo()
+
+        println("\nDeseja continuar pesquisando? s/n")
+    } while (sc.next().equals("s", true))
+
+
+    println(jogador.jogosBuscados)
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 /*
     ARQUIVO ANTES DA REFATORAÇÃO (Para minha consulta pessoal de estudo)
