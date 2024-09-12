@@ -1,22 +1,13 @@
 package com.gus1331
 
 import com.gus1331.controllers.SharkApiController
+import com.gus1331.controllers.JogadorController
+import com.gus1331.models.Jogador
 import java.util.*
 
 fun main() {
     val sc = Scanner(System.`in`)
     println("Hello World!!!\n\n")
-
-    /*
-    val meuJogoFavorito = SharkApiController.buscarPorIdSemDescricao("230937")
-
-    println("Olá, me chamo Gus\nMeu jogo favorito é \n$meuJogoFavorito\n")
-
-    println("Busque um jogo pelo seu id:")
-
-    println(SharkApiController.buscarPorId(sc.nextLine()))
-     */
-
 
 }
 
@@ -121,3 +112,21 @@ fun main() {
         </dependency>
 
 */
+
+/*
+val meuJogador = Jogador("Gus", "gus@email.com")
+val meuJogoFavorito = SharkApiController.buscarPorIdSemDescricao("230937")
+
+println("Olá, me chamo Gus\nMeu jogo favorito é \n$meuJogoFavorito\n")
+
+println("Busque o seu jogo favorito pelo id:")
+
+println(SharkApiController.buscarPorId(sc.nextLine()))
+
+
+val jogador = JogadorController.novoJogador()
+
+
+println(jogador)
+
+ */

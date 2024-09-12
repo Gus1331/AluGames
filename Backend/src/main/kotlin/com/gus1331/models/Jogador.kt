@@ -1,20 +1,61 @@
 package com.gus1331.models
 
 import java.time.LocalDate
+import java.util.*
+import kotlin.random.Random
 
 data class Jogador (var nome:String, var email:String){
-    var dataNascimento:LocalDate? = null
-    var usuario:String? = null
-    val idJogador:Int? = null
 
+    var dataNascimento:LocalDate? = null
+
+    var usuario:String? = null
+        set(value) {
+            field = value
+            if(this.idJogador.isNullOrBlank()) gerarIdInterno()
+        }
+
+    var idJogador:String? = null
+        private set
+
+    val jogosBuscados = mutableListOf<Jogo>()
 
     constructor(nome: String, email: String, dataNascimento:LocalDate, usuario:String):
             this(nome, email){
                 this.dataNascimento = dataNascimento
                 this.usuario = usuario
+                gerarIdInterno()
             }
 
+    init {
+        val sc = Scanner(System.`in`)
+        while (nome.trim().isBlank()){
+            println("Nome inválido\n")
+
+            println("Insira o nome novamente: ")
+            nome = sc.nextLine()
+        }
+        while(!validarEmail(email)){
+            println("Email inválido\n")
+
+            println("Insira o email novamente: ")
+            email = sc.nextLine()
+        }
+    }
+
+
+    private fun validarEmail(email:String):Boolean{
+        val emailRegex = Regex("^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\\\.[A-Za-z]{2,6}\$")
+        return emailRegex.matches(email)
+    }
+
+    private fun gerarIdInterno(){
+        val numero = Random.nextInt(1000)
+        val codigo = String.format("%04d", numero)
+        val prefixo = "" + nome.get(0) + nome.get(1)
+        idJogador = prefixo + codigo
+    }
+
     override fun toString(): String {
-        return "Jogador(nome='$nome', email='$email', dataNascimento=$dataNascimento, usuario=$usuario, idJogador=$idJogador)"
+        return "Jogador{\n    nome='$nome',\n    email='$email',\n    dataNascimento=$dataNascimento,\n    usuario=$usuario,\n    idJogador=$idJogador}"
     }
 }
