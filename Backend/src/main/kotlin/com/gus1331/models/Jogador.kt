@@ -1,41 +1,49 @@
 package com.gus1331.models
 
 import com.gus1331.controllers.SharkApiController
+import com.gus1331.models.enums.Plano
 import java.time.LocalDate
 import java.util.*
 import kotlin.random.Random
 
-data class Jogador (var nome:String, var email:String){
+data class Jogador(var nome: String, var email: String) {
 
-    var dataNascimento:LocalDate? = null
+    var dataNascimento: LocalDate? = null
 
-    var usuario:String? = null
+    var usuario: String? = null
         set(value) {
             field = value
-            if(this.idJogador.isNullOrBlank()) gerarIdInterno()
+            if (this.idJogador.isNullOrBlank()) gerarIdInterno()
         }
 
-    var idJogador:String? = null
+    var idJogador: String? = null
         private set
 
     val jogosBuscados = mutableListOf<Jogo>()
 
-    constructor(nome: String, email: String, dataNascimento:LocalDate, usuario:String):
-            this(nome, email){
-                this.dataNascimento = dataNascimento
-                this.usuario = usuario
-                gerarIdInterno()
-            }
+    val jogosAlugados = mutableListOf<Aluguel>()
+
+    var plano:Plano = Plano.BRONZE
+        set(value){
+            field = value
+        }
+
+    constructor(nome: String, email: String, dataNascimento: LocalDate, usuario: String) :
+            this(nome, email) {
+        this.dataNascimento = dataNascimento
+        this.usuario = usuario
+        gerarIdInterno()
+    }
 
     init {
         val sc = Scanner(System.`in`)
-        while (nome.trim().isBlank()){
+        while (nome.trim().isBlank()) {
             println("Nome inválido\n")
 
             println("Insira o nome novamente: ")
             nome = sc.nextLine()
         }
-        while(!validarEmail(email)){
+        while (!validarEmail(email)) {
             println("Email inválido\n")
 
             println("Insira o email novamente: ")
@@ -44,8 +52,8 @@ data class Jogador (var nome:String, var email:String){
     }
 
 
-    fun pesquisarJogo(){
-        if(usuario == null){
+    fun pesquisarJogo() {
+        if (usuario == null) {
             println("O jogador $nome precisa terminar o seu cadastro antes de pesquisar")
             return
         }
@@ -56,22 +64,33 @@ data class Jogador (var nome:String, var email:String){
 
         println("\nJogos encontrados:\n")
         var i = 1
-        resultadoPesquisa.forEach{
+        resultadoPesquisa.forEach {
             println("$i - ${it.titulo}")
             jogosBuscados.add(it)
             i++
         }
     }
 
-    private fun validarEmail(email:String):Boolean{
+    private fun validarEmail(email: String): Boolean {
         val emailRegex = Regex("^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,6}\$")
         return emailRegex.matches(email)
     }
 
-    private fun gerarIdInterno(){
+    fun alugarJogo(aluguel: Aluguel) {
+        if(aluguel.jogador.idJogador != this.idJogador){
+            throw Exception("Este alguem não foi atrelado a este jogador, Jogador:$idJogador, Aluguel:${aluguel.jogador.idJogador} ")
+        }
+        jogosAlugados.add(aluguel)
+    }
+
+    fun alugueisNoMes(mes: Int):List<Aluguel>{
+        return jogosAlugados.filter { aluguel -> aluguel.dataInicio.monthValue == mes }
+    }
+
+    private fun gerarIdInterno() {
         val numero = Random.nextInt(1000)
         val codigo = String.format("%04d", numero)
-        val prefixo = "" + nome.get(0) + nome.get(1)
+        val prefixo = "" + usuario?.get(0) + usuario?.get(1) + usuario?.get(2)
         idJogador = prefixo + codigo
     }
 
