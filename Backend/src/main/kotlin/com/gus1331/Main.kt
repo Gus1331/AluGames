@@ -3,33 +3,22 @@ package com.gus1331
 import com.gus1331.controllers.SharkApiController
 import com.gus1331.controllers.JogadorController
 import com.gus1331.controllers.JogoController
+import com.gus1331.database.dao.JogoDAO
+import com.gus1331.database.Conexao
 import com.gus1331.models.Jogador
 import com.gus1331.models.enums.Plano
 import java.time.LocalDate
 import java.util.*
 
 fun main() {
+    val conexao = Conexao(Conexao.iniciarConexao()).conn
+    val jogoDAO = JogoDAO(conexao)
     val sc = Scanner(System.`in`)
     // pesquisar(sc)
 
     val jogadores = JogadorController.listarJogadores()
-    val jogos = JogoController.listarJogos()
+    val jogos = jogoDAO.getJogos()
 
-    jogadores.get(0).plano = Plano.PRATA
-    JogadorController.alugarJogo(jogadores.get(0), jogos.get(7), LocalDate.now(), LocalDate.now().plusDays(10))
-    JogadorController.alugarJogo(jogadores.get(0), jogos.get(2), LocalDate.now(), LocalDate.now().plusDays(4))
-    JogadorController.alugarJogo(jogadores.get(0), jogos.get(1), LocalDate.now(), LocalDate.now().plusDays(1))
-    JogadorController.alugarJogo(jogadores.get(0), jogos.get(3), LocalDate.now(), LocalDate.now().plusDays(4))
-
-    println(jogadores.get(0).jogosAlugados)
-}
-
-fun testarConsumoJsonJogador(){
-    println(JogadorController.listarJogadores())
-}
-
-fun testarConsumoJsonJogo(){
-    println(JogoController.listarJogos())
 }
 
 fun pesquisar(sc: Scanner){

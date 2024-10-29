@@ -91,6 +91,16 @@
             <artifactId>gson</artifactId>
             <version>2.11.0</version>
         </dependency>
+<!--        <dependency>-->
+<!--            <groupId>com.microsoft.sqlserver</groupId>-->
+<!--            <artifactId>mssql-jdbc</artifactId>-->
+<!--            <version>9.4.0.jre8</version>-->
+<!--        </dependency>-->
+        <dependency>
+            <groupId>com.microsoft.sqlserver</groupId>
+            <artifactId>mssql-jdbc</artifactId>
+            <version>12.2.0.jre11</version> <!-- ou a versão que for compatível -->
+        </dependency>
     </dependencies>
 
 </project>

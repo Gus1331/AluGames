@@ -22,6 +22,9 @@ data class Jogador(var nome: String, var email: String) {
     val jogosBuscados = mutableListOf<Jogo>()
 
     val jogosAlugados = mutableListOf<Aluguel>()
+        get() {
+            return field
+        }
 
     var plano:Plano = Plano.BRONZE
         set(value){

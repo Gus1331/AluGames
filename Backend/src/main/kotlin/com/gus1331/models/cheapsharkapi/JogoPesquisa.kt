@@ -5,3 +5,4 @@ data class JogoPesquisa(val external:String, val thumb:String){
         return "JogoPesquisa(external='$external', thumb='$thumb')"
     }
 }
+
